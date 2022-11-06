@@ -1,0 +1,20 @@
+{
+    "name": "seguncodes/smyphp",
+    "autoload": {
+        "psr-4": {
+            "SmyPhp\\": "./",
+            "App\\": "App/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Olusegun Joe-Alabi",
+            "email": "shegstix64@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.4",
+        "phpmailer/phpmailer": "^6.6",
+        "firebase/php-jwt": "^6.3"
+    }
+}

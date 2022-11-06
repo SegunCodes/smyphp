@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * SmyPhp - A simple PHP framework
+ * @author SegunCodes
+ *  @package SmyPhp
+*/ 
+use SmyPhp\Core\Application;
+
+// define('ROOT', '');
+require_once __DIR__."/vendor/autoload.php";
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+require 'core/Helpers.php';
+
+require 'autoload.php';
+$run = new SmyPhp\Core\Cli\Cli();
