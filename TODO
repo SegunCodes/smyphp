@@ -1,5 +1,3 @@
-csrf token
-file upload
-load css and js files
+file upload in base64 format
 Server authorization, headers, bearer tokens
-ORMs
+Update ORM

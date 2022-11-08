@@ -25,8 +25,6 @@ abstract class Model
 
     abstract public function rules(): array;
 
-    // abstract public function attributeName(): string;
-
     public function labels(): array{
         return [];
     }

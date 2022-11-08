@@ -74,7 +74,7 @@ class Router{
         if($callback === false){
             $callback = $this->getCallback();
             if($callback === false){
-                $this->response->setStatusCode(404); 
+                $this->response->setStatus(404); 
                 return "Cannot GET $path";
             }
         }
@@ -104,7 +104,7 @@ class Router{
 
     public function renderContent($viewContent){
         $layoutContent = $this->viewLayout();
-        return str_replace('{{content}}', $viewContent, $layout);
+        return str_replace('{{content}}', $viewContent, $layoutContent);
     }
 
     protected function viewLayout(){

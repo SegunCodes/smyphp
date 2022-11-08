@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Requests;
 
 use App\Models\User;
 use SmyPhp\Core\Application;
 use SmyPhp\Core\Model;
 
-class LoginUser extends Model
+class LoginRequest extends Model
 {
     public string $email = "";
     public string $password = "";

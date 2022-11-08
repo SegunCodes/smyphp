@@ -11,7 +11,7 @@ class Form
 {
 
     public static function start($action, $method){
-        echo sprintf('<form action="%s" method="%s" enctype="multipart/form-data">', $action, $method);
+        echo sprintf('<form action="%s" method="%s">', $action, $method);
         return new Form();
     }
 

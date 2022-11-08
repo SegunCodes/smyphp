@@ -1,6 +1,7 @@
 <?php
 
 namespace SmyPhp\Core\Database;
+use SmyPhp\Core\Application;
 /**
  * SmyPhp - A simple PHP framework
  * @author SegunCodes
@@ -26,7 +27,7 @@ class Database
         $this->createMigrations();
         $savedMigrations = $this->getSavedMigrations();
         $newMigrations = [];
-        $files = scandir(Application::$ROOT_DIR.'/migrate');
+        $files = scandir(Application::$ROOT_DIR.'/migrations');
         $toSave = array_diff($files, $savedMigrations);
         foreach ($toSave as $migration){
             if($migration === '.' || $migration === '..'){

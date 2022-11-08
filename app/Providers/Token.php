@@ -3,6 +3,7 @@
 namespace App\Providers;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use SmyPhp\Core\Application;
 
 require_once Application::$ROOT_DIR."/vendor/autoload.php";
 
