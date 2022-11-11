@@ -131,4 +131,36 @@ class AuthController extends Controller{
             'error' => $msg
         ]);
     }
+
+    public function fileAgain(){
+        $this->setLayout('auth');
+        if (isset($_POST['submit'])) {
+            $selfie = (isset($_POST['file'])) ? $_POST['file'] :  null;
+            $uploadId = new \App\Providers\Files("image","file", 4, $selfie);
+                
+            //idcard errors
+            if ($uploadId->sizeIsLarge() && !$uploadId->hasError()) {
+                $msg = "Please upload image below 4.0MB !";
+            }
+            if ($uploadId->hasError() && !$uploadId->isEmpty()) {
+                $msg = "There is an error in the photo you uploaded !";
+            }
+            if (!$uploadId->isImage() && !$uploadId->isEmpty()) {
+                $msg = "The file you uploaded is not an image !";
+            }
+            if ($uploadId->isEmpty()) {
+                $msg = "No Image !";
+            }
+            $uploadId->prefix = 'selfie_';
+            $uploadId->pushBase64ImageTo(Application::$ROOT_DIR."/storage");
+            $msg = "submit";
+            return $this->render('test', [
+                'error' => $msg
+            ]);
+        }
+        $msg = "wahala";
+        return $this->render('file', [
+            'error' => $msg
+        ]);
+    }
 }
