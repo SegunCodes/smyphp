@@ -1,11 +1,9 @@
 <?php 
-spl_autoload_register('__autoloadCore');
-spl_autoload_register('__autoloadApp');
-spl_autoload_register('__autoloadTests');
+spl_autoload_register('loadCore');
+spl_autoload_register('loadApp');
+spl_autoload_register('loadTests');
 
-// Autoload SmyPhp Core
-
-function __autoloadCore($class){
+function loadCore($class){
     $parts = explode('\\', $class);
 
    	if ($parts[0] === "SmyPhp") {
@@ -15,9 +13,7 @@ function __autoloadCore($class){
    	}
 }
 
-// Autoload SmyPhp App
-
-function __autoloadApp($class){
+function loadApp($class){
     $parts = explode('\\', $class);
     if ($parts[0] === "App") {
        unset($parts[0]);
@@ -26,9 +22,7 @@ function __autoloadApp($class){
     }
 }
 
-// Autoload Tests
-
-function __autoloadTests($class){
+function loadTests($class){
     $parts = explode('\\', $class);
     if ($parts[0] === "Tests") {
        unset($parts[0]);

@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require_once Application::$ROOT_DIR."/vendor/autoload.php";
 
-class MailService{
+class MailServiceProvider{
 
     public function Mail($subject, $recipient_email, $recipient_name, $email_template, $email_variables = null){
         //PHPMailer Object

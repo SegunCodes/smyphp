@@ -137,7 +137,7 @@ class Router{
             $$key = $value;
         }
         ob_start();
-        include_once Application::$ROOT_DIR."/config/default/$view.php";
+        include_once Application::$ROOT_DIR."/config/routes/$view.php";
         return ob_get_clean();
     }
 

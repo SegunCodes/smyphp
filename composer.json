@@ -15,6 +15,7 @@
     "require": {
         "vlucas/phpdotenv": "^5.4",
         "phpmailer/phpmailer": "^6.6",
-        "firebase/php-jwt": "^6.3"
+        "firebase/php-jwt": "^6.3",
+        "filp/whoops": "^2.14"
     }
 }

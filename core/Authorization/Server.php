@@ -1,23 +1,21 @@
 <?php 
 
-namespace App\Providers;
+namespace SmyPhp\Core\Authorization;
 
-class AuthorizationProvider
+class Server
 {
 
 
-    public static function getAuthorizationHeader(){
+    public static function getHeader(){
         $headers = null;
-        if (isset($_SERVER['Authorization'])) {
-            $headers = trim($_SERVER["Authorization"]);
-        }
-        else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { //Nginx or fast CGI
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+        }
+        else if (isset($_SERVER['Authorization'])) {
+            $headers = trim($_SERVER["Authorization"]);
         } elseif (function_exists('apache_request_headers')) {
             $requestHeaders = apache_request_headers();
-            // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
             $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
-            //print_r($requestHeaders);
             if (isset($requestHeaders['Authorization'])) {
                 $headers = trim($requestHeaders['Authorization']);
             }
@@ -27,7 +25,7 @@ class AuthorizationProvider
 
 
    public static function getBearerToken() {
-        $headers = self::getAuthorizationHeader();
+        $headers = self::getHeader();
 
         if (!empty($headers)) {
             if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
@@ -38,7 +36,7 @@ class AuthorizationProvider
     } 
     
     
-    public static function convertJSONPayloadToPOST(){
+    public static function convertPayload(){
         $payload = file_get_contents('php://input');
         $is_json = is_string($payload) && is_array(json_decode($payload, true)) ? true : false;
         if($is_json) {

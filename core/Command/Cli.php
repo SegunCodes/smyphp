@@ -1,5 +1,5 @@
 <?php 
-namespace SmyPhp\Core\Cli;
+namespace SmyPhp\Core\Command;
 /**
  * SmyPhp - A simple PHP framework
  * @author SegunCodes
@@ -32,9 +32,9 @@ final class Cli
 
             echo " \n";
 
-            echo "--start\tDisplays your application on the browser using the default port 8000 \n\n";
+            echo "--start  Runs your application on the browser using the default port 8000 \n\n";
 
-            echo "--start --port<number>\tDisplays your application on your preferred port\n";
+            echo "--start --port[number]  Runs your application on your preferred port\n";
         }
 
     }

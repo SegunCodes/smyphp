@@ -9,8 +9,7 @@ use SmyPhp\Core\Http\Response;
 use SmyPhp\Core\Application;
 use App\Http\Middleware\Authenticate;
 use App\Http\Requests\LoginRequest;
-use App\Providers\MailService;
-
+use App\Providers\MailServiceProvider;
 
 class AuthController extends Controller{
 
@@ -31,6 +30,14 @@ class AuthController extends Controller{
         return $this->render('login', [
             'model' => $loginUser
         ]);
+    }
+
+    public function loginParam(Request $request, Response $response){
+        echo '<pre>';
+        var_dump($request->getParams());
+        echo '</pre>';
+        $this->setLayout('auth');
+        return $this->render('login');
     }
     
     public function register(Request $request){
@@ -67,7 +74,7 @@ class AuthController extends Controller{
         $email = "shegstix64@gmail.com";
         $name = "olusegun";
         $email_template = Application::$ROOT_DIR."/views/email.php";
-        $send = (new MailService)->Mail($subject, $email, $name, $email_template);
+        $send = (new MailServiceProvider)->Mail($subject, $email, $name, $email_template);
     }
 
     public function testFileUpload(Request $request){
