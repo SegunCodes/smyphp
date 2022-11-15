@@ -1,3 +1,3 @@
 file upload in base64 format
-Server authorization, headers, bearer tokens
-Update, Count, FindAll ORM
+Count, FindAll query builders
+Properly link css, js amd image files: set app entry point
