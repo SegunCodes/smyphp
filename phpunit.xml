@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="core/Test.php"
+colors="true"
+verbose="true"
+stopOnFailure="true">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix='Test.php'>./tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

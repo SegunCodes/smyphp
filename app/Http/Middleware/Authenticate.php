@@ -27,21 +27,5 @@ class Authenticate extends BaseMiddleware
             }
         }
     }
-
-    // public function protectForUser() {
-    //     return function ($req, $res, $pipe) {
-    //         if (!$this->authUser) {
-    //             $res->sendStatus(401);
-    //             $res->json(["message" => "authentication required", "status" => false]);
-    //             return $pipe->block();
-    //         }
-
-    //        if(time() > $this->auth_token['expires_at']){
-    //             $res->sendStatus(401);
-    //             $res->json(["message" => "authentication token expired", "status" => false]);
-    //             return $pipe->block();
-    //        }
-
-    //     };
-    // } 
+ 
 }
