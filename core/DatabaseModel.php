@@ -42,6 +42,23 @@ abstract class DatabaseModel extends Model
         return $stmt->fetchObject(static::class);
     }
 
+    public function findOneOrWhere($where, $orWhere){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $orpart = array_keys($orWhere); 
+        $sql2 = implode(" AND ", array_map(fn($or) => "$or = :$or", $orpart));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql or $sql2"); 
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        foreach ($orWhere as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
+        }
+        $stmt->execute();
+        return $stmt->fetchObject(static::class);
+    }
+
     public function findAll(){
         $tableName = static::tableName();
         $stmt = self::prepare("SELECT * FROM $tableName ORDER BY id DESC");
@@ -56,6 +73,23 @@ abstract class DatabaseModel extends Model
         $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql ORDER BY id DESC");
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function findAllOrWhere($where, $orWhere){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $orpart = array_keys($orWhere); 
+        $sql2 = implode(" AND ", array_map(fn($or) => "$or = :$or", $orpart));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql or $sql2 ORDER BY id DESC");
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        foreach ($orWhere as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
         }
         $stmt->execute();
         return $stmt->fetchAll();
@@ -80,6 +114,23 @@ abstract class DatabaseModel extends Model
         return $stmt->fetchColumn();
     }
 
+    public function countOrWhere($where, $orWhere){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $orpart = array_keys($orWhere); 
+        $sql2 = implode(" AND ", array_map(fn($or) => "$or = :$or", $orpart));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT count(*) FROM $tableName WHERE $sql OR $sql2");
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        foreach ($orWhere as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
+        }
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+
     public function delete($where){
         $tableName = static::tableName();
         $attributes = array_keys($where);
@@ -88,8 +139,23 @@ abstract class DatabaseModel extends Model
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
         }
-        $stmt->execute();
-        return true;
+        return $stmt->execute();
+    }
+
+    public function deleteOrWhere($where, $orWhere){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $orpart = array_keys($orWhere); 
+        $sql2 = implode(" AND ", array_map(fn($or) => "$or = :$or", $orpart));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("DELETE FROM $tableName WHERE $sql OR $sql2");
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        foreach ($orWhere as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
+        }
+        return $stmt->execute();
     }
 
     public function update($data, $where){
@@ -104,6 +170,27 @@ abstract class DatabaseModel extends Model
         }
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
+        }
+        return $stmt->execute();
+    }
+
+    public function updateOrWhere($data, $where, $orWhere){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $set = array_keys($data);
+        $orpart = array_keys($orWhere); 
+        $sql2 = implode(" AND ", array_map(fn($or) => "$or = :$or", $orpart));
+        $setData = implode(", ", array_map(fn($d) => "$d = :$d", $set));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("UPDATE $tableName SET $setData WHERE $sql or $sql2");
+        foreach ($data as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
+        }
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        foreach ($orWhere as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
         }
         return $stmt->execute();
     }

@@ -1,15 +1,31 @@
 {
     "name": "seguncodes/smyphp",
+    "keywords": [
+		"smyphp",
+		"phpframeworks",
+        "smyphp framework",
+        "smyphp php framework"
+	],
+	"type": "project",
+	"license": "MIT",
+	"minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "SmyPhp\\": "./",
             "App\\": "App/"
         }
     },
+    "repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/SegunCodes/smyphp"
+		}
+	],
     "authors": [
         {
             "name": "Olusegun Joe-Alabi",
-            "email": "shegstix64@gmail.com"
+            "email": "shegstix64@gmail.com",
+            "homepage": "https://twitter.com/dreal_olusegun"
         }
     ],
     "require": {

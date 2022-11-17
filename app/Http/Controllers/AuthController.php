@@ -160,13 +160,14 @@ class AuthController extends Controller{
         //         'status' => 0
         //     ]
         // );
-        $value = $count->update(
-            [
-                'status' => 0,
-                'name' => 'joe'
-            ],
-            ['email' => 'shegstix64@gmail.com']
-        );
+        // $value = $count->update(
+        //     [
+        //         'status' => 0,
+        //         'name' => 'joe'
+        //     ],
+        //     ['email' => 'shegstix64@gmail.com']
+        // );
+        $value = $count->findOneOrWhere(['email' => 'faruq'],['id' => 4]);
         // $value = $count->findOne(['email' => 'shegstix64@gmail.com','name'=>'john']);
         /**USING SQL QUERY */
         // $stmt = DatabaseModel::prepare("SELECT count(*) FROM users WHERE id = 2 OR email = 'shegstix64@gmail.com'");
