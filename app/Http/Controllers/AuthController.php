@@ -143,15 +143,38 @@ class AuthController extends Controller{
     public function countUsers(){
         /**USING BUILT IN QUERY */
         $count = new User;
-        // $value = $count->countWhere(['email' => 'shegstix64@gmail.com']);
-        $value = $count->findAllWhere(['status' => 1]);
+        // $value = $count->countWhere(
+        //     [
+        //         'email' => 'shegstix64@gmail.com',
+        //     ]
+        // );
+        // $value = $count->findAllWhere(
+        //     [
+        //         'status' => 1,
+        //         'email' => 'shegstix64@gmail.com'
+        //     ]
+        // );
+        // $value = $count->findOne(
+        //     [
+        //         'email' => 'shegstix63@gmail.com',
+        //         'status' => 0
+        //     ]
+        // );
+        $value = $count->update(
+            [
+                'status' => 0,
+                'name' => 'joe'
+            ],
+            ['email' => 'shegstix64@gmail.com']
+        );
+        // $value = $count->findOne(['email' => 'shegstix64@gmail.com','name'=>'john']);
         /**USING SQL QUERY */
         // $stmt = DatabaseModel::prepare("SELECT count(*) FROM users WHERE id = 2 OR email = 'shegstix64@gmail.com'");
         // $stmt->execute();
         // $value = $stmt->fetchColumn();
         $this->setLayout('auth');
         return $this->render('tesfolder/count', [
-            'count' => $value
+            'count' => json_encode($value)
         ]);
     }
 }

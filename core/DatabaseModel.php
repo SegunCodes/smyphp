@@ -33,8 +33,8 @@ abstract class DatabaseModel extends Model
     public function findOne($where){
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql");
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql"); 
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
         }
@@ -44,21 +44,21 @@ abstract class DatabaseModel extends Model
 
     public function findAll(){
         $tableName = static::tableName();
-        $stmt = self::prepare("SELECT * FROM $tableName");
+        $stmt = self::prepare("SELECT * FROM $tableName ORDER BY id DESC");
         $stmt->execute();
-        return json_encode($stmt->fetchAll());
+        return $stmt->fetchAll();
     }
 
     public function findAllWhere($where){
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql");
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql ORDER BY id DESC");
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
         }
         $stmt->execute();
-        return json_encode($stmt->fetchAll());
+        return $stmt->fetchAll();
     }
 
     public function count(){
@@ -71,8 +71,8 @@ abstract class DatabaseModel extends Model
     public function countWhere($where){
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        $stmt = self::prepare("SELECT count(*) FROM $tableName WHERE $sql"); 
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT count(*) FROM $tableName WHERE $sql");
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
         }
@@ -83,7 +83,7 @@ abstract class DatabaseModel extends Model
     public function delete($where){
         $tableName = static::tableName();
         $attributes = array_keys($where);
-        $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
         $stmt = self::prepare("DELETE FROM $tableName WHERE $sql");
         foreach ($where as $key => $item) {
             $stmt->bindValue(":$key", $item);
@@ -92,17 +92,21 @@ abstract class DatabaseModel extends Model
         return true;
     }
 
-    //UPDATE
-    // public function update($where){
-    //     $tableName = static::tableName();
-    //     $attributes = array_keys($where);
-    //     $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-    //     $stmt = self::prepare("UPDATE $tableName SET WHERE $sql");
-    //     foreach ($where as $key => $item) {
-    //         $stmt->bindValue(":$key", $item);
-    //     }
-    //     $stmt->execute();
-    // }
+    public function update($data, $where){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $set = array_keys($data);
+        $setData = implode(", ", array_map(fn($d) => "$d = :$d", $set));
+        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("UPDATE $tableName SET $setData WHERE $sql");
+        foreach ($data as $keys => $items) {
+            $stmt->bindValue(":$keys", $items);
+        }
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        return $stmt->execute();
+    }
 
     public static function prepare($sql){
         return Application::$app->db->pdo->prepare($sql);
