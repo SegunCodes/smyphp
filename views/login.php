@@ -5,7 +5,6 @@
     <div class="row">
         <h1>Login</h1>
         <div class="col-12">
-        <img src="../../assets/img/test.jpg" alt="image">
         <?php $form = \SmyPhp\Core\Form\Form::start('', 'post')?>
             <?php echo $form->input($model, 'email') ?>
             <?php echo $form->input($model, 'password')->Password() ?>
