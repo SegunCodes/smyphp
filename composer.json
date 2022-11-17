@@ -7,6 +7,7 @@
         "smyphp php framework"
 	],
 	"type": "project",
+    "description": "Smyphp is a lightweight PHP framework built for developers who need a simple framework to create web applications",
 	"license": "MIT",
 	"minimum-stability": "dev",
     "autoload": {
