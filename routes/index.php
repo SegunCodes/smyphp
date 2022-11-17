@@ -24,6 +24,7 @@ $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
 $app->router->get('/logout', [AuthController::class, 'logout']);
 $app->router->get('/send', [AuthController::class, 'sendMail']);
+$app->router->get('/count', [AuthController::class, 'countUsers']);
 $app->router->get('/upload', [AuthController::class, 'testFileUpload']);
 $app->router->post('/upload', [AuthController::class, 'testFileUpload']);
 $app->router->get('/home', [AppController::class, 'home']);

@@ -10,6 +10,7 @@ use SmyPhp\Core\Application;
 use App\Http\Middleware\Authenticate;
 use App\Http\Requests\LoginRequest;
 use App\Providers\MailServiceProvider;
+use SmyPhp\Core\DatabaseModel;
 
 class AuthController extends Controller{
 
@@ -136,6 +137,21 @@ class AuthController extends Controller{
         $msg = "wahala";
         return $this->render('test', [
             'error' => $msg
+        ]);
+    }
+
+    public function countUsers(){
+        /**USING BUILT IN QUERY */
+        $count = new User;
+        // $value = $count->countWhere(['email' => 'shegstix64@gmail.com']);
+        $value = $count->findAllWhere(['status' => 1]);
+        /**USING SQL QUERY */
+        // $stmt = DatabaseModel::prepare("SELECT count(*) FROM users WHERE id = 2 OR email = 'shegstix64@gmail.com'");
+        // $stmt->execute();
+        // $value = $stmt->fetchColumn();
+        $this->setLayout('auth');
+        return $this->render('tesfolder/count', [
+            'count' => $value
         ]);
     }
 }

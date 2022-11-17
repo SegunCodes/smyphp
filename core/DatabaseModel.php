@@ -42,6 +42,44 @@ abstract class DatabaseModel extends Model
         return $stmt->fetchObject(static::class);
     }
 
+    public function findAll(){
+        $tableName = static::tableName();
+        $stmt = self::prepare("SELECT * FROM $tableName");
+        $stmt->execute();
+        return json_encode($stmt->fetchAll());
+    }
+
+    public function findAllWhere($where){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $sql = implode("AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT * FROM $tableName WHERE $sql");
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        $stmt->execute();
+        return json_encode($stmt->fetchAll());
+    }
+
+    public function count(){
+        $tableName = static::tableName();
+        $stmt = self::prepare("SELECT count(*) FROM $tableName"); 
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+
+    public function countWhere($where){
+        $tableName = static::tableName();
+        $attributes = array_keys($where);
+        $sql = implode("AND", array_map(fn($attr) => "$attr = :$attr", $attributes));
+        $stmt = self::prepare("SELECT count(*) FROM $tableName WHERE $sql"); 
+        foreach ($where as $key => $item) {
+            $stmt->bindValue(":$key", $item);
+        }
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+
     public function delete($where){
         $tableName = static::tableName();
         $attributes = array_keys($where);
@@ -51,6 +89,7 @@ abstract class DatabaseModel extends Model
             $stmt->bindValue(":$key", $item);
         }
         $stmt->execute();
+        return true;
     }
 
     //UPDATE
