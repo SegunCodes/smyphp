@@ -33,12 +33,12 @@ class AuthController extends Controller{
         ]);
     }
 
-    public function loginParam(Request $request, Response $response){
+    public function routeParam(Request $request, Response $response){
         echo '<pre>';
         var_dump($request->getParams());
         echo '</pre>';
         $this->setLayout('auth');
-        return $this->render('login');
+        return $this->render('param');
     }
     
     public function register(Request $request){

@@ -17,8 +17,8 @@ use App\Http\Controllers\AuthController;
 $app->router->get('/', function(){
     return "Hello world";
 });
-$app->router->get('/login', [AuthController::class, 'login']);
-$app->router->get('/login/{id}', [AuthController::class, 'loginParam']);
+$app->router->get('/user/id/login', [AuthController::class, 'login']);
+$app->router->get('/param/{id}', [AuthController::class, 'routeParam']);
 $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
