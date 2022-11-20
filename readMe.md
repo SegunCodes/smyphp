@@ -193,7 +193,7 @@ In layouts folder
 </body>
 </html>
 ```
-The `{{content}}` is used to display the content of `example.php` qith the layouts from `main.php` file.
+The `{{content}}` is used to display the content of `example.php` with the layouts from `main.php` file.
 
 ### Defining Custom Layout for views
 
@@ -208,12 +208,14 @@ namespace App\Http\Controllers;
 use SmyPhp\Core\Controller\Controller;
 
 class ExampleController extends Controller{
-    $this->setLayout('yourLayoutName');
     public function examplePage(){
+        $this->setLayout('yourLayoutName');
         return $this->render('yourFileName');
     }
 }
 ```
+
+The `$this->setLayout()` function is used to set the layout for a particular page, and should be called before the rendering of the page you are setting a layout for.
 
 ### Forms
 
