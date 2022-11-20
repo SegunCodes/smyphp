@@ -69,7 +69,7 @@ $ php smyphp --help
 
 All migration files should be saved in the `migrations` folder. `The user_migrations.php` is a default migration file and can be used as a boiler plate for creating other migration files.
 
-Tp migrate the migration files, CD into your projects directory and use this command to perform a database migration
+To migrate the migration files, `cd` into your projects directory and use this command to perform a database migration
 
 ```shell
 $ php migrate.php
