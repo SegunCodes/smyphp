@@ -37,8 +37,6 @@ Smyphp is a lightweight PHP framework built for developers who need a simple fra
 
 # INSTALLATION
 
-Clone the repository
-
 ```shell
 $ composer create-project seguncodes/smyphp yourProjectName
 ```
