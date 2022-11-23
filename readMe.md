@@ -267,8 +267,8 @@ in `login.php` in views directory
 <?php \SmyPhp\Core\Form\Form::stop()?>
 ```
 
-The `Form::start()` method is used to start the form and takes two params `(action, method)`.
-The `$form->input()` method is used to call an input field in the form, it takes in two params `(model, inputName)`. The `model` parameter is used to reference the Model handling the request for that form; while the `inputName` is the `name` for that input field. 
+The `Form::start()` method is used to start the form and takes two arguments `(action, method)`.
+The `$form->input()` method is used to call an input field in the form, it takes in two arguments `(model, inputName)`. The `model` parameter is used to reference the Model handling the request for that form; while the `inputName` is the `name` for that input field. 
 
 ### Handling Form Data
 Form data is handled using controllers. Here is an example:
@@ -374,10 +374,133 @@ class User extends DatabaseModel
 ```
 
 ### SQL QUERIES
+Writing SQL queries in the framework can be achieved using the framework's query builders or default SQL statements
 
 ### Query Builders
+The framework comes with various query builders 
+`save()`
+The save function saves data into database 
+`findOne()` 
+finds row WHERE argument exists and returns only 1
+```php
+use App\Models\User;
+$user = (new User)->findOne(['email' => 'youremail@email.com']); //finds row that email exists and returns only 1
+
+/*
+|--------------------------------------------------------------------------
+| More than one conditions can be passed in
+|
+*/
+$user = (new User)->findOne([
+            'email' => 'youremail@email.com',
+            'id' => 2
+        ]); //finds where row that email AND id exists
+```
+`findOneOrWhere()`
+This takes in two arguments with an OR condition
+```php
+use App\Models\User;
+$user = (new User)->findOneOrWhere([
+        'email' => 'youremail@email.com'
+    ], ['id' => 2]); //finds where row that email OR id exists
+```
+`findAll()`
+This performs the basic SELECT all functionality in descending order of id
+```php
+use App\Models\User;
+$user = (new User)->findAll(); //finds where row that email OR id exists
+```
+`findAllWhere()`
+This performs the findAll functionality with a WHERE clause
+```php
+use App\Models\User;
+$user = (new User)->findAllWhere([
+        'email' => 'youremail@email.com'
+    ]); //finds ALL rows that email
+```
+`findAllOrWhere()`
+This performs the findAll functionality with a WHERE clause and an OR condition
+```php
+use App\Models\User;
+$user = (new User)->findAllOrWhere([
+        'email' => 'youremail@email.com'
+    ], ['id' => 2]); //finds rows where email OR id exists
+```
+`count()`
+This counts the number of columns in a table
+```php
+use App\Models\User;
+$user = (new User)->count(); //returns the number of columns
+```
+`countWhere()`
+This counts the number of columns with a WHERE clause
+```php
+use App\Models\User;
+$user = (new User)->countWhere(['name'=>'john']); //returns the number of columns with name of john
+```
+`countOrWhere()`
+This counts the number of columns with a WHERE clause and an OR condition
+```php
+use App\Models\User;
+$user = (new User)->countOrWhere([
+            'name'=>'john'
+        ], [
+            'status' => 1
+        ]); //returns the number of columns with name of john or a status of 1
+```
+`delete()`
+This takes a WHERE clause and deletes a row or rows
+```php
+use App\Models\User;
+$user = (new User)->delete([
+            'name'=>'john'
+        ]); //deletes the row(s) with name of john
+```
+`deleteOrWhere()`
+This takes a WHERE clause and deletes a row or rows
+```php
+use App\Models\User;
+$user = (new User)->deleteOrWhere([
+            'name'=>'john'
+        ], [
+            'email' => 'youremail@email.com'
+        ]); //deletes the row(s) with name of john or email of youremail@email.com
+```
+`update()`
+This takes two arguments, the data to be updated and a WHERE clause
+```php
+use App\Models\User;
+$user = (new User)->delete([
+            'name'=>'john',
+            'status'=> 1
+        ], [
+            'email' => 'youremail@email.com'
+        ]); //sets status to 1 and name to john where the email is youremail@email.com
+```
+`updateOrWhere()`
+This takes three arguments, the data to be updated, a WHERE clause and an OR condition
+```php
+use App\Models\User;
+$user = (new User)->delete([
+            'name'=>'john',
+            'status'=> 1
+        ], [
+            'email' => 'youremail@email.com'
+        ], [
+            'id' => 4
+        ]); //sets status to 1 and name to john where the email is youremail@email.com OR id is 4
+```
+
 
 ### Writing Custom SQL queries
+Unlike using the query builders, custom SQL statements can be written, here is an example:
+```php
+use SmyPhp\Core\DatabaseModel;
+
+$stmt = DatabaseModel::prepare("SELECT count(*) FROM users WHERE id = 2");
+// $stmt->bindParam(); //this can be called if you are binding
+$stmt->execute();
+```
 
 ### MIDDLEWARES
 The framework includes a middleware that verifies if the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to your application's login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application
@@ -426,7 +549,7 @@ To send an hand coded mail, the `MailServiceProvider.php` file in the app/Provid
 ### Flash Messages
 
 Sending flash messages after a successful request can be achieved from the controller by calling the 
-`setflash()` method which takes in two parameters `(key, message)`.
+`setflash()` method which takes in two arguments `(key, message)`.
 in `ExampleController.php` file
 
 ```php
@@ -444,9 +567,9 @@ class ExampleController extends Controller{
 }
 ```
 
-# CONTRIBUTING AND VULNERABILITIES
+# Contributing & Vulnerabilities
 If you would like to contribute or you discover a security vulnerability in the SmyPhp FrameworK, your pull requests are welcome. However, for major changes or ideas on how to improve the library, please create an issue.
 
-# LICENSE
+# License
 
 The SmyPhp framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
