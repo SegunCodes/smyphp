@@ -331,6 +331,9 @@ The form builder also comes with various input types
         <input type="submit" class="btn btn-block btn-primary" value="Submit">
     </div>
 <?php \SmyPhp\Core\Form\Form::stop()?>
+
+//for text area field
+echo new TextareaField($model, 'textarea')
 ```
 
 ### Custom Form Labels
