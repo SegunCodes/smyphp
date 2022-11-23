@@ -44,7 +44,7 @@ $
 ```
 # USAGE
 
-### Starting Application
+### STARTING APPLICATION
 
 CD into your projects directory and run your application using the command below
 
@@ -67,7 +67,7 @@ $ php smyphp --help
 ```
 
 
-### Database Migration
+### DATABASE MIGRATION
 
 All migration files should be saved in the `migrations` folder. `The user_migrations.php` is a default migration file and can be used as a boiler plate for creating other migration files.
 
@@ -77,7 +77,7 @@ To migrate the migration files, `cd` into your projects directory and use this c
 $ php migrate.php
 ```
 
-### Routes
+### ROUTES
 The routes folder contains the assets folder where css, javascript, image and other files can be stored. The routes folder also contains the `index.php` file which is used to handle all routing.
 
 ### Rendering Pages
@@ -250,7 +250,7 @@ class ExampleController extends Controller{
 
 `$request->getParams()` is used to get the parameters passed in the url
 
-### Forms
+### FORMS
 Forms can be used in the framework using the default HTML forms or using the Framework's form builder method
 
 ### Form Builder
@@ -373,20 +373,76 @@ class User extends DatabaseModel
 }
 ```
 
-### SQL Queries
+### SQL QUERIES
 
 ### Query Builders
 
 ### Writing Custom SQL queries
 
-### Middlewares
+### MIDDLEWARES
+The framework includes a middleware that verifies if the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to your application's login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application
 
-### Sending Mail
+In `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use App\Http\Middleware\Authenticate;
+
+class ExampleController extends Controller{
+
+    public function __construct(){
+        $this->authenticatedMiddleware(new Authenticate([]));
+    }
+}
+```
+The `Authenticate` middleware is called in the controller, the routes that should not be accesible by the user is passed in array of `new Authenticate([])`.
+
+
+
+### SENDING MAIL
+Sending mails in the framework is achieved using PHPMAILER. To send a mail from the controller , the `MailServiceProvider` class is called.
+
+in `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use App\Providers\MailServiceProvider;
+
+class ExampleController extends Controller{
+
+    public function sendMail(){
+        $subject = "subject";
+        $email = "youremail@email.com";
+        $name = "your name";
+        $email_template = Application::$ROOT_DIR."/views/email.php"; //if the email will be sent in a template
+        $send = (new MailServiceProvider)->Mail($subject, $email, $name, $email_template);
+    }
+}
+```
+To send an hand coded mail, the `MailServiceProvider.php` file in the app/Providers directory can be edited
 
 ### Flash Messages
 
+Sending flash messages after a successful request can be achieved from the controller by calling the 
+`setflash()` method which takes in two parameters `(key, message)`.
+in `ExampleController.php` file
 
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use SmyPhp\Core\Application;
 
+class ExampleController extends Controller{
+
+    public function sendFlash(){
+        Application::$app->session->setFlash('success', 'Thanks for joining');
+        Application::$app->response->redirect('/'); //this redirects to the route where the flash message will appear
+        exit;
+    }
+}
+```
 
 # CONTRIBUTING AND VULNERABILITIES
 If you would like to contribute or you discover a security vulnerability in the SmyPhp FrameworK, your pull requests are welcome. However, for major changes or ideas on how to improve the library, please create an issue.

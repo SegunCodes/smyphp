@@ -9,13 +9,11 @@ use SmyPhp\Core\Http\Response;
 use SmyPhp\Core\Application;
 use App\Http\Middleware\Authenticate;
 use App\Http\Requests\LoginRequest;
-use App\Providers\MailServiceProvider;
-use SmyPhp\Core\DatabaseModel;
 
 class AuthController extends Controller{
 
     public function __construct(){
-        $this->authenticatedMiddleware(new Authenticate(['']));
+        $this->authenticatedMiddleware(new Authenticate([]));
     }
 
     public function login(Request $request, Response $response){
