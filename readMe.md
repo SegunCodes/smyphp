@@ -11,10 +11,12 @@
     -  [Rendering Pages With Parameters](#rendering-pages-with-parameters)
     -  [Views and Layouts](#views-and-layouts)
     -  [Defining Custom Layout for views](#defining-custom-layout-for-views)
+    -  [Passing params into routes](#passing-params-into-routes)
     4. [Forms](#forms)
     - [Form Builder](#form-builder)
     - [Input Types](#input-types)
     - [Custom Form Labels](#custom-form-labels)
+    - [Handling Form Data](#handling-form-data)
     5. [SQL queries](#sql-queries)
     -  [Query Builders](#query-builders)
     - [Writing Custom SQL Queries](#writing-custom-sql-queries)
@@ -217,13 +219,159 @@ class ExampleController extends Controller{
 
 The `$this->setLayout()` function is used to set the layout for a particular page, and should be called before the rendering of the page you are setting a layout for.
 
+### Passing params into routes
+Params can be passed into routes and queried in controllers, here is an example:
+
+`index.php` file
+
+```php
+use App\Http\Controllers\ExampleController;
+
+$app->router->get('/hello/{id}', [ExampleController::class, 'examplePage']);
+```
+
+then in the `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use SmyPhp\Core\Http\Request;
+
+class ExampleController extends Controller{
+
+    public function examplePage(Request $request){
+        echo '<pre>';
+        var_dump($request->getParams());
+        echo '</pre>';
+        return $this->render('yourFileName');
+    }
+}
+```
+
+`$request->getParams()` is used to get the parameters passed in the url
+
 ### Forms
+Forms can be used in the framework using the default HTML forms or using the Framework's form builder method
 
 ### Form Builder
+Using the Form builder method, in any of your view files , for example a login form... 
+in `login.php` in views directory
+```php
+<?php $form = \SmyPhp\Core\Form\Form::start('', 'post')?>
+    <?php echo $form->input($model, 'email') ?>
+    <?php echo $form->input($model, 'password')->Password() ?>
+    <br>
+    <div class="input-group">
+        <input type="submit" class="btn btn-block btn-primary" value="Submit">
+    </div>
+<?php \SmyPhp\Core\Form\Form::stop()?>
+```
+
+The `Form::start()` method is used to start the form and takes two params `(action, method)`.
+The `$form->input()` method is used to call an input field in the form, it takes in two params `(model, inputName)`. The `model` parameter is used to reference the Model handling the request for that form; while the `inputName` is the `name` for that input field. 
+
+### Handling Form Data
+Form data is handled using controllers. Here is an example:
+
+in `register.php` in views directory
+```php
+<?php $form = \SmyPhp\Core\Form\Form::start('/register', 'post')?>
+    <?php echo $form->input($model, 'email') ?>
+    <?php echo $form->input($model, 'password')->Password() ?>
+    <br>
+    <div class="input-group">
+        <input type="submit" class="btn btn-block btn-primary" value="Submit">
+    </div>
+<?php \SmyPhp\Core\Form\Form::stop()?>
+```
+Then in `index.php` the route is defined
+```php
+use App\Http\Controllers\ExampleController;
+
+$app->router->post('/register', [ExampleController::class, 'register']);
+```
+finally in the `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use SmyPhp\Core\Http\Request;
+use App\Models\User;
+
+class ExampleController extends Controller{
+
+    public function register(Request $request){
+        $this->setLayout('auth');
+        $user = new User();
+        //$user references the User model
+        if($request->isPost()){
+            //your registration logic comes here
+            return $this->render('register', [
+                'model' =>$user //this is the model being sent to the form in the register page
+            ]);
+        }
+        return $this->render('register', [
+            'model' =>$user //this is the model being sent to the form in the register page
+        ]);
+    }
+}
+```
+
 
 ### Input Types
+The form builder also comes with various input types
+```php
+<?php $form = \SmyPhp\Core\Form\Form::start('', 'post')?>
+    <?php echo $form->input($model, 'password')->Password() ?>
+    <?php echo $form->input($model, 'number')->TypeNumber() ?>
+    <?php echo $form->input($model, 'checkBox')->CheckBox() ?>
+    <?php echo $form->input($model, 'date')->TypeDate() ?>
+    <?php echo $form->input($model, 'file')->TypeFile() ?>
+    <?php echo $form->input($model, 'radio')->TypeRadio() ?>
+    <br>
+    <div class="input-group">
+        <input type="submit" class="btn btn-block btn-primary" value="Submit">
+    </div>
+<?php \SmyPhp\Core\Form\Form::stop()?>
+```
 
 ### Custom Form Labels
+The default labels of input fields in the form builder method are the inputNames of the field. The labels can be changed in the model referenced in the `input()` method.
+
+in `login.php` in views directory
+```php
+<?php $form = \SmyPhp\Core\Form\Form::start('/login', 'post')?>
+    <?php echo $form->input($model, 'email') ?>
+    <?php echo $form->input($model, 'password')->Password() ?>
+    <br>
+    <div class="input-group">
+        <input type="submit" class="btn btn-block btn-primary" value="Submit">
+    </div>
+<?php \SmyPhp\Core\Form\Form::stop()?>
+```
+
+in the model being referenced in the controller handling the form data, there is a `labels()` method, where the labels can be customized
+
+`Model.php`
+```php
+<?php
+
+namespace App\Models;
+
+use SmyPhp\Core\DatabaseModel;
+class User extends DatabaseModel
+{
+    //...
+
+    public function labels(): array
+    {
+        return [
+            'email' => 'Your Email',
+            'password' => 'Your Password',
+        ];
+    }
+}
+```
 
 ### SQL Queries
 
