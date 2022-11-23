@@ -13,7 +13,7 @@ use App\Http\Requests\LoginRequest;
 class AuthController extends Controller{
 
     public function __construct(){
-        $this->authenticatedMiddleware(new Authenticate([]));
+        $this->authenticatedMiddleware(new Authenticate(['']));
     }
 
     public function login(Request $request, Response $response){

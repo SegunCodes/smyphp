@@ -513,11 +513,11 @@ use App\Http\Middleware\Authenticate;
 class ExampleController extends Controller{
 
     public function __construct(){
-        $this->authenticatedMiddleware(new Authenticate([]));
+        $this->authenticatedMiddleware(new Authenticate(['']));
     }
 }
 ```
-The `Authenticate` middleware is called in the controller, the routes that should not be accesible by the user is passed in array of `new Authenticate([])`.
+The `Authenticate` middleware is called in the controller, the routes that should not be accesible by the user is passed in array of `new Authenticate([''])`.
 
 
 
