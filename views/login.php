@@ -1,5 +1,8 @@
 <?php
-
+use SmyPhp\Core\Application;
+if (!Application::$app->isGuest()) {
+    Application::$app->response->redirect('/');
+}
 ?>
 <div class="container">
     <div class="row">
