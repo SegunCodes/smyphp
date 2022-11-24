@@ -520,7 +520,7 @@ class ExampleController extends Controller{
     }
 }
 ```
-The `Authenticate` middleware is called in the controller, the routes that should not be accesible by the user is passed in array of `new Authenticate([''])`.
+The `Authenticate` middleware is called in the controller, the method handling the route that should not be accesible by the user is passed in array of `new Authenticate([''])`.
 
 To prevent a user from accessing a page after login, add the following code to the top of the file rendering that page; or to set restrictions for users who are logged in or not
 ```php
