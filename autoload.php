@@ -8,7 +8,7 @@ function loadCore($class){
 
    	if ($parts[0] === "SmyPhp") {
    		unset($parts[0]);
-   		$file =  __DIR__."/core/".implode("/", $parts).'.php';
+   		$file =  __DIR__."/".implode("/", $parts).'.php';
         require $file;
    	}
 }
