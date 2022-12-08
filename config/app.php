@@ -15,7 +15,7 @@ require_once dirname(__DIR__)."/vendor/autoload.php";
 // $whoops->register();
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
-require dirname(__DIR__).'/core/Helpers.php';
+require dirname(__DIR__).'/Core/Helpers.php';
 require dirname(__DIR__).'/autoload.php';
 
 $config = import(dirname(__DIR__)."/config/database.php");
