@@ -11,7 +11,7 @@ use SmyPhp\Core\Authorization\Server;
 
 require_once dirname(__DIR__)."/vendor/autoload.php";
 $whoops = new \Whoops\Run;
-$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+$whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler);
 $whoops->register();
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
