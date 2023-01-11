@@ -141,4 +141,13 @@ class Router{
         return ob_get_clean();
     }
 
+    public function getApiError($view, $params = []){
+        foreach($params as $key => $value){
+            $$key = $value;
+        }
+        ob_start();
+        include_once Application::$ROOT_DIR."/config/routes/$view.php";
+        return ob_get_clean();
+    }
+    
 }
