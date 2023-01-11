@@ -8,6 +8,7 @@ use SmyPhp\Core\Session;
 use SmyPhp\Core\Controller\Controller;
 use SmyPhp\Core\Database\Database;
 use SmyPhp\Core\DatabaseModel;
+use SmyPhp\Core\Exception\Forbidden;
 /**
  * SmyPhp - A simple PHP framework
  * @author SegunCodes
@@ -55,9 +56,13 @@ class Application{
     public function run(){
         try{
             echo $this->router->resolve();
-        }catch(\Exception $e){
+        }catch(Forbidden $e){
             $this->response->setStatus($e->getCode());  
             echo $this->router->getAppViews("error", [
+                'exception' => $e
+            ]);
+        }catch(\JsonException $e){
+            echo $this->router->getApiError("api-error",[
                 'exception' => $e
             ]);
         }
