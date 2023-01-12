@@ -6,7 +6,6 @@ use SmyPhp\Core\Application;
 use SmyPhp\Core\Middleware\BaseMiddleware;
 use SmyPhp\Core\Authorization\Server;
 use SmyPhp\Core\Http\Response;
-use SmyPhp\Core\DatabaseModel;
 use App\Providers\Token;
 
 class ApiMiddleware extends BaseMiddleware
@@ -35,11 +34,6 @@ class ApiMiddleware extends BaseMiddleware
                             "success" => false
                         ], 401));
                     }
-                    $stmt = DatabaseModel::prepare("SELECT * FROM users WHERE  id = :id LIMIT 1");
-                    $stmt->bindParam(':id', $authToken['id']);
-                    $stmt->execute();
-                    $user = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-                    if(count($user) > 0)   $authenticatedUser = $user[0]; 
                 }else{
                     throw new \JsonException($response->json([
                         "message" => "authentication required", 
@@ -51,5 +45,4 @@ class ApiMiddleware extends BaseMiddleware
             }
         }
     }
-
 }
