@@ -4,7 +4,7 @@ namespace App\Providers;
 
 class Image{
 
-    public function convert($base64Image, $outputFolder, $outputFile) {
+    public static function convert($base64Image, $outputFolder, $outputFile) {
         // Decode the base64-encoded image data
         $imageData = base64_decode($base64Image);
 
