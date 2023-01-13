@@ -63,7 +63,7 @@ abstract class DatabaseModel extends Model
         $tableName = static::tableName();
         $stmt = self::prepare("SELECT * FROM $tableName ORDER BY id DESC");
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function findAllWhere($where){
@@ -75,7 +75,7 @@ abstract class DatabaseModel extends Model
             $stmt->bindValue(":$key", $item);
         }
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function findAllOrWhere($where, $orWhere){
@@ -92,7 +92,7 @@ abstract class DatabaseModel extends Model
             $stmt->bindValue(":$keys", $items);
         }
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public function count(){
