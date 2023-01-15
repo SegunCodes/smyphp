@@ -23,6 +23,9 @@
     6. [Middlewares](#middlewares)
     7. [Sending Mails](#sending-mail)
     8. [Flash Messages](#flash-messages)
+    9. [Image conversion](#image-conversion)
+    10. [Sending Json responses in API](#Sending-Json-responses-in-API)
+    11. [Getting Authenticated users in API](#Getting-Authenticated-users-in-API)
 - [Contributing and Vulnerabilities](#contributing-and-vulnerabilities)
 - [License](#license)
 
@@ -504,7 +507,26 @@ $stmt->execute();
 ```
 
 ### MIDDLEWARES
-The framework includes a middleware that verifies if the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to your application's login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application
+The framework includes a middleware that verifies if the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to your application's login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application.
+
+The first middleware `ApiMiddleware` is used to check for authenticated users on your api and it is called in the controller, the method handling the route that should not be accesible by the user is passed in array of `new Authenticate([''])`.
+
+In `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use App\Http\Middleware\ApiMiddleware;
+
+class ExampleController extends Controller{
+
+    public function __construct(){
+        $this->authenticatedMiddleware(new ApiMiddleware(['']));
+    }
+}
+```
+
+The second middleware `Authenticate` middleware is called in the controller and it's used when dealing with dynamic webpages on the framework, the method handling the route that should not be accesible by the user is passed in array of `new Authenticate([''])`.
 
 In `ExampleController.php` file
 
@@ -520,7 +542,6 @@ class ExampleController extends Controller{
     }
 }
 ```
-The `Authenticate` middleware is called in the controller, the method handling the route that should not be accesible by the user is passed in array of `new Authenticate([''])`.
 
 To prevent a user from accessing a page after login, add the following code to the top of the file rendering that page; or to set restrictions for users who are logged in or not
 ```php
@@ -530,7 +551,6 @@ if (!Application::$app->isGuest()) {
 }
 ```
 The `isGuest()` function is used to check if there is an existing session
-
 
 ### SENDING MAIL
 Sending mails in the framework is achieved using PHPMAILER. To send a mail from the controller , the `MailServiceProvider` class is called.
@@ -575,6 +595,76 @@ class ExampleController extends Controller{
     }
 }
 ```
+
+### Image Conversion
+When dealing with images using the framework, the image file has to be sent in base64 format to the backend API. To convert an image from the base64 format , the `Image` class is called.
+
+in `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use App\Providers\Image;
+
+class ExampleController extends Controller{
+
+    public function sendMail(){
+        $base64Image = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEh"; 
+        $path = Application::$ROOT_DIR."/routes/assets/uploads";
+        $filename = "uploads_".uniqid().".jpg";
+        $convertImage = Image::convert($base64Image, $path, $filename);
+    }
+}
+```
+To use the `Image` class , make sure the `extension=gd` in your php.ini file is enabled.
+
+### Sending Json responses in API
+To send json responses in API using the framework is quite simple and very similar to most php frameworks
+
+in `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use SmyPhp\Core\Http\Request;
+use SmyPhp\Core\Http\Response;
+
+class ExampleController extends Controller{
+
+    public function sendResponse(Request $request, Response $response){
+         return $response->json([
+            "success" => false,
+            "message" => "All fields are required"
+        ], 400);
+    }
+}
+```
+The `json` method takes two arguments, the array data to be returned and the status code
+
+### Getting Authenticated user in API
+
+Getting the authenticated user in your API on the framework is quite simple and similar to most php frameworks
+in `ExampleController.php` file
+
+```php
+namespace App\Http\Controllers;
+use SmyPhp\Core\Controller\Controller;
+use SmyPhp\Core\Http\Request;
+use SmyPhp\Core\Http\Response;
+use SmyPhp\Core\Auth;
+
+class ExampleController extends Controller{
+
+    public function sendResponse(Request $request, Response $response){
+        $user = Auth::User();
+         return $response->json([
+            "success" => false,
+            "user" => $user
+        ], 400);
+    }
+}
+```
+`Auth::User()` returns the id of the authenticated user.
 
 # Contributing & Vulnerabilities
 If you would like to contribute or you discover a security vulnerability in the SmyPhp FrameworK, your pull requests are welcome. However, for major changes or ideas on how to improve the library, please create an issue.
