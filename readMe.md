@@ -474,7 +474,7 @@ $user = (new User)->deleteOrWhere([
 This takes two arguments, the data to be updated and a WHERE clause
 ```php
 use App\Models\User;
-$user = (new User)->delete([
+$user = (new User)->update([
             'name'=>'john',
             'status'=> 1
         ], [
@@ -485,7 +485,7 @@ $user = (new User)->delete([
 This takes three arguments, the data to be updated, a WHERE clause and an OR condition
 ```php
 use App\Models\User;
-$user = (new User)->delete([
+$user = (new User)->updateOrWhere([
             'name'=>'john',
             'status'=> 1
         ], [
