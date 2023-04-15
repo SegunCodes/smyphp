@@ -5,7 +5,7 @@ RewriteRule ^(.+)$ routes/index.php?url=$1 [QSA,L]
 
 RewriteEngine on
 
-RewriteCond %{HTTP_HOST} ^(www.)?oztech.com.ng$
+RewriteCond %{HTTP_HOST} ^(www.)?website.com$
 RewriteCond %{REQUEST_URI} !^/routes/
 
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -13,6 +13,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule ^(.*)$ /routes/$1
 
-RewriteCond %{HTTP_HOST} ^(www.)?oztech.com.ng$
+RewriteCond %{HTTP_HOST} ^(www.)?website.com$
 
 RewriteRule ^(/)?$ routes/index.php [L]
