@@ -176,22 +176,32 @@ abstract class DatabaseModel extends Model
 
     public function updateOrWhere($data, $where, $orWhere){
         $tableName = static::tableName();
-        $attributes = array_keys($where);
         $set = array_keys($data);
-        $orpart = array_keys($orWhere); 
-        $sql2 = implode(" AND ", array_map(fn($or) => "$or = :$or", $orpart));
-        $setData = implode(", ", array_map(fn($d) => "$d = :$d", $set));
-        $sql = implode(" AND ", array_map(fn($attr) => "$attr = :$attr", $attributes));
-        $stmt = self::prepare("UPDATE $tableName SET $setData WHERE $sql or $sql2");
-        foreach ($data as $keys => $items) {
-            $stmt->bindValue(":$keys", $items);
+        $whereConditions = implode(" AND ", array_map(fn($attr) => "$attr = :where_$attr", array_keys($where)));
+        $orWhereConditions = implode(" OR ", array_map(fn($attr) => "$attr = :orWhere_$attr", array_keys($orWhere)));
+        $setData = implode(", ", array_map(fn($d) => "$d = :$d", $set));       
+        $sql = "UPDATE $tableName SET $setData";      
+        if (!empty($whereConditions)) {
+            $sql .= " WHERE $whereConditions";
+        }       
+        if (!empty($orWhereConditions)) {
+            if (!empty($whereConditions)) {
+                $sql .= " OR $orWhereConditions";
+            } else {
+                $sql .= " WHERE $orWhereConditions";
+            }
+        }        
+        $stmt = self::prepare($sql);
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
         }
-        foreach ($where as $key => $item) {
-            $stmt->bindValue(":$key", $item);
+        foreach ($where as $key => $value) {
+            $stmt->bindValue(":where_$key", $value);
         }
-        foreach ($orWhere as $keys => $items) {
-            $stmt->bindValue(":$keys", $items);
+        foreach ($orWhere as $key => $value) {
+            $stmt->bindValue(":orWhere_$key", $value);
         }
+        
         return $stmt->execute();
     }
 
